@@ -10,6 +10,9 @@ async function startServer() {
   app.use(express.json());
 
   // API Routes
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+  });
 
   // Create Exam
   app.post("/api/exams", (req, res) => {
@@ -278,6 +281,13 @@ async function startServer() {
       appType: "spa",
     });
     app.use(vite.middlewares);
+  } else {
+    // Production: Serve static files from dist
+    const path = await import("path");
+    app.use(express.static(path.resolve(__dirname, "dist")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+    });
   }
 
   app.listen(PORT, "0.0.0.0", () => {

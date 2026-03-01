@@ -69,6 +69,40 @@ export default function App() {
     setView('home');
   };
 
+  // Check backend health
+  const [backendError, setBackendError] = useState(false);
+  useEffect(() => {
+    fetch('/api/health')
+      .then(res => {
+        if (!res.ok) throw new Error('Backend not reachable');
+        return res.json();
+      })
+      .catch(() => setBackendError(true));
+  }, []);
+
+  if (backendError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-50 p-4">
+        <div className="max-w-md bg-white p-6 rounded-lg shadow-lg border border-red-200 text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-2">Lỗi Kết Nối Máy Chủ</h2>
+          <p className="text-gray-700 mb-4">
+            Ứng dụng này yêu cầu <strong>Máy chủ (Backend)</strong> để hoạt động.
+          </p>
+          <div className="text-left text-sm bg-gray-100 p-3 rounded mb-4">
+            <p className="font-semibold mb-1">Nguyên nhân phổ biến:</p>
+            <ul className="list-disc list-inside space-y-1 text-gray-600">
+              <li>Bạn đang chạy trên <strong>GitHub Pages</strong> hoặc hosting tĩnh (chỉ có Frontend).</li>
+              <li>Máy chủ Node.js chưa được khởi động.</li>
+            </ul>
+          </div>
+          <p className="text-sm text-gray-500">
+            Vui lòng triển khai ứng dụng trên các nền tảng hỗ trợ Node.js như <strong>Render, Railway, Fly.io</strong> hoặc chạy cục bộ trên máy tính.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const renderContent = () => {
     switch (view) {
       case 'home':
