@@ -1,0 +1,5 @@
+{
+  "name": "ChemExam 2025",
+  "description": "Ứng dụng thi trắc nghiệm Hóa học theo form tốt nghiệp THPT 2025. Giáo viên tạo phòng, nhập đáp án, học sinh thi và xem điểm ngay.",
+  "requestFramePermissions": []
+}
