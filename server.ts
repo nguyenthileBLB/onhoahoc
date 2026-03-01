@@ -27,9 +27,9 @@ async function startServer() {
       stmt.run(id, code, admin_token, title, duration_minutes, JSON.stringify(answer_key), password || null);
 
       res.json({ id, code, admin_token });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to create exam" });
+    } catch (error: any) {
+      console.error("Exam creation error:", error);
+      res.status(500).json({ error: "Failed to create exam: " + error.message });
     }
   });
 

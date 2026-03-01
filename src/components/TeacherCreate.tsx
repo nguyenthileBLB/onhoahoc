@@ -32,11 +32,23 @@ export default function TeacherCreate({ onCreated, onBack }: TeacherCreateProps)
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, password, duration_minutes: duration, answer_key }),
       });
+      
+      if (!res.ok) {
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          alert(data.error || "Lỗi tạo đề thi");
+        } catch {
+          alert("Lỗi máy chủ: " + text.substring(0, 100));
+        }
+        return;
+      }
+
       const data = await res.json();
-      if (data.error) alert(data.error);
-      else onCreated({ id: data.id, code: data.code, token: data.admin_token });
-    } catch (e) {
-      alert("Error creating exam");
+      onCreated({ id: data.id, code: data.code, token: data.admin_token });
+    } catch (e: any) {
+      console.error(e);
+      alert("Lỗi kết nối: " + e.message);
     } finally {
       setLoading(false);
     }
